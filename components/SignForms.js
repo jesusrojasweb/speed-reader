@@ -33,17 +33,15 @@ const SignForms = ({
   Illustration,
   bottomText,
   touchableText,
+  buttonText,
   goTo,
+  signFunction,
 }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, [navigation]);
-
-  const signUp = () => {
-    setIsLoading(true);
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -83,10 +81,12 @@ const SignForms = ({
           </View>
 
           {isLoading && (
-            <ActivityIndicator size="large" color={colorPrincipal} />
+            <View style={styles.loader}>
+              <ActivityIndicator size="large" color={colorPrincipal} />
+            </View>
           )}
 
-          <ButtonType title={"Crear Cuenta"} />
+          <ButtonType title={buttonText} onPress={signFunction} />
 
           <View style={styles.bottonTextContainer}>
             <Text style={styles.bottomText}>{bottomText}</Text>
@@ -119,6 +119,9 @@ const styles = StyleSheet.create({
   illustration: {
     height: 220,
     marginVertical: 20,
+  },
+  loader: {
+    marginBottom: 20,
   },
   bottonTextContainer: {
     flexDirection: "row",

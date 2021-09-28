@@ -24,6 +24,9 @@ import {
   colorTitle,
   fontTitle,
 } from "./screens/styles/variables";
+import DashboardScreen from "./screens/DashboardScreen";
+
+LogBox.ignoreLogs(["Setting a timer"]);
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +65,7 @@ export default function App() {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Dashboard" component={DashboardScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );

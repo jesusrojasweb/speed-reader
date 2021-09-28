@@ -9,6 +9,7 @@ import {
 
 import HomeIllustration from "../assets/HomeIllustration";
 import ButtonType from "../components/ButtonType";
+import { useAuth } from "../hooks/useAuth";
 
 const HomeScreen = ({ navigation }) => {
   useLayoutEffect(() => {
@@ -16,6 +17,8 @@ const HomeScreen = ({ navigation }) => {
       headerShown: false,
     });
   }, [navigation]);
+
+  useAuth(navigation);
 
   const handleNavigate = (to) => {
     navigation.navigate(to);
