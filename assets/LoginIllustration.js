@@ -1,7 +1,7 @@
 import * as React from "react";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
 
-function SvgComponent(props) {
+function LoginIllustration(props) {
   return (
     <Svg
       width={"100%"}
@@ -86,4 +86,4 @@ function SvgComponent(props) {
   );
 }
 
-export default SvgComponent;
+export default LoginIllustration;
