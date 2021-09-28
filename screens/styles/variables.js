@@ -10,5 +10,6 @@ export const fontMedium = "Montserrat_500Medium";
 
 export const backgroundDefault = {
   backgroundColor: colorBackground,
+  paddingHorizontal: 30,
   //   paddingBottom: 40,
 };

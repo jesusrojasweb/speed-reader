@@ -48,7 +48,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     ...backgroundDefault,
-    paddingHorizontal: 30,
     paddingVertical: 40,
     height: "100%",
     justifyContent: "center",
