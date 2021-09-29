@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { LogBox } from "react-native";
 
 import { useFonts } from "expo-font";
 import {
@@ -32,14 +33,12 @@ const Stack = createNativeStackNavigator();
 
 const globalScreenOptions = {
   headerStyle: {
-    backgroundColor: colorBackground,
+    backgroundColor: "white",
     elevation: 0,
     shadowOpacity: 0,
     borderBottomWidth: 0,
   },
   headerTitleStyle: {
-    color: "white",
-    textTransform: "uppercase",
     fontFamily: fontTitle,
     fontSize: 16,
   },

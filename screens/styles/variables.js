@@ -13,3 +13,15 @@ export const backgroundDefault = {
   paddingHorizontal: 30,
   //   paddingBottom: 40,
 };
+
+export const navigationOptions = {
+  headerTitleAlign: "center",
+  headerTitleStyle: {
+    fontFamily: fontTitle,
+  },
+  headerStyle: {
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 0,
+  },
+};
