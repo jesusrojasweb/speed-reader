@@ -28,6 +28,7 @@ import {
 import DashboardScreen from "./screens/DashboardScreen";
 
 LogBox.ignoreLogs(["Setting a timer"]);
+LogBox.ignoreLogs(["Animated: `useNativeDriver`"]);
 
 const Stack = createNativeStackNavigator();
 
