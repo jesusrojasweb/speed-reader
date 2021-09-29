@@ -31,7 +31,7 @@ const ReadingListScreen = ({ navigation }) => {
       <Text>Aqui se muestra la lista</Text>
       <NativeBaseProvider>
         <Center flex={1}>
-          <AddButton />
+          <AddButton navigation={navigation} />
         </Center>
       </NativeBaseProvider>
     </View>

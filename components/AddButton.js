@@ -12,7 +12,7 @@ import {
   SafeAreaView,
 } from "react-native";
 
-const AddButton = () => {
+const AddButton = ({ navigation }) => {
   const [isActive, setIsActive] = useState(false);
 
   const translationA = useRef(new Animated.Value(0)).current;
@@ -63,6 +63,10 @@ const AddButton = () => {
             style={{
               transform: [{ translateY: translationB }],
               opacity: fadeB,
+            }}
+            onPress={() => {
+              navigation.navigate("Create Text");
+              toggleButton();
             }}
           />
           <ButtonUpload

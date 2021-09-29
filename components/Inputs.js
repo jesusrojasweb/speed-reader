@@ -15,6 +15,11 @@ const Inputs = (props) => {
       {/* <TouchableWithoutFeedback> */}
       <Input
         {...props}
+        inputStyle={{
+          fontFamily: fontRegular,
+          color: isFocus ? colorPrincipal : colorText,
+          fontSize: 14,
+        }}
         inputContainerStyle={styles(isFocus).input}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
@@ -36,8 +41,6 @@ const styles = (isFocus) =>
       borderRadius: 8,
       borderBottomColor: "transparent",
       fontSize: 14,
-      fontFamily: fontRegular,
-      color: isFocus ? colorPrincipal : colorText,
       bottom: 0,
       color: colorText,
       elevation: 4,
