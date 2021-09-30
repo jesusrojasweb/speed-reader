@@ -54,7 +54,7 @@ const AddButton = ({ navigation }) => {
   };
 
   return (
-    <Box position="relative" h={100} w="100%">
+    <Box h={100} w="100%">
       {isActive && (
         <>
           <ButtonUpload

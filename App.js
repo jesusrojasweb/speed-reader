@@ -27,6 +27,7 @@ import {
 } from "./screens/styles/variables";
 import DashboardScreen from "./screens/DashboardScreen";
 import CreateTextScreen from "./screens/CreateTextScreen";
+import ConfigReadingScreen from "./screens/ConfigReadingScreen";
 
 LogBox.ignoreLogs(["Setting a timer"]);
 LogBox.ignoreLogs(["Animated: `useNativeDriver`"]);
@@ -68,6 +69,7 @@ export default function App() {
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Dashboard" component={DashboardScreen} />
           <Stack.Screen name="Create Text" component={CreateTextScreen} />
+          <Stack.Screen name="Config Screen" component={ConfigReadingScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
