@@ -2,6 +2,7 @@ export const colorPrincipal = "#FF6162";
 export const colorTitle = "#001A2E";
 export const colorText = "#8D8B8C";
 export const colorBackground = "#FFFFFF";
+export const colorWords = "#F7F7F7";
 export const fontTitle = "NotoSerif_700Bold";
 export const fontSubTitle = "NotoSerif_400Regular";
 export const fontRegular = "Montserrat_400Regular";
