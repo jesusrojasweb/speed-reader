@@ -10,6 +10,7 @@ import {
   Montserrat_400Regular,
   Montserrat_600SemiBold,
   Montserrat_500Medium,
+  Montserrat_700Bold,
 } from "@expo-google-fonts/montserrat";
 import {
   NotoSerif_400Regular,
@@ -31,6 +32,7 @@ import ConfigReadingScreen from "./screens/ConfigReadingScreen";
 
 LogBox.ignoreLogs(["Setting a timer"]);
 LogBox.ignoreLogs(["Animated: `useNativeDriver`"]);
+LogBox.ignoreLogs(["Warning: forwardRef"]);
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +58,7 @@ export default function App() {
     Montserrat_600SemiBold,
     NotoSerif_400Regular,
     NotoSerif_700Bold,
+    Montserrat_700Bold,
   });
 
   if (!fontsLoaded) {

@@ -1,9 +1,17 @@
 import React, { useLayoutEffect, useState } from "react";
-import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { Image } from "react-native-elements";
 import ImageCard from "../components/ImageCard";
 import ButtonType from "../components/ButtonType";
 import IncrementInput from "../components/IncrementInput";
+import { AntDesign } from "@expo/vector-icons";
 import {
   backgroundDefault,
   fontSemiBold,
@@ -24,9 +32,29 @@ const ConfigReadingScreen = ({ navigation, route }) => {
   const [words, setWords] = useState(1);
   const [ppm, setPpm] = useState(200);
 
+  const divided = lengthText / ppm;
+  const estimated = divided.toFixed(2);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Configuracion de lectura",
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("List");
+          }}
+          style={{
+            marginLeft: 0,
+          }}
+        >
+          <AntDesign
+            name="arrowleft"
+            size={24}
+            color={colorTitle}
+            // style={{ paddingHorizontal: 2 }}
+          />
+        </TouchableOpacity>
+      ),
     });
   }, [navigation, route]);
 
@@ -46,20 +74,33 @@ const ConfigReadingScreen = ({ navigation, route }) => {
             change={setWords}
             min={1}
             amount={1}
+            max={3}
           />
           <IncrementInput
             label="Palabras por minuto:"
             value={ppm}
             change={setPpm}
-            min={200}
+            min={100}
             amount={50}
           />
 
           <Text style={styles.estimated}>
-            Tiempo estimado: {lengthText / ppm} minutos
+            Tiempo estimado: {estimated} {estimated > 1 ? "minutos" : "minuto"}
           </Text>
 
-          <ButtonType title="Comenzar Lectura" type="primary" />
+          <ButtonType
+            title="Comenzar Lectura"
+            type="primary"
+            onPress={() =>
+              navigation.navigate("Read", {
+                name,
+                author,
+                text,
+                words,
+                ppm,
+              })
+            }
+          />
         </ScrollView>
       </View>
     </View>

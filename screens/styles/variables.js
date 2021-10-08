@@ -8,6 +8,7 @@ export const fontSubTitle = "NotoSerif_400Regular";
 export const fontRegular = "Montserrat_400Regular";
 export const fontSemiBold = "Montserrat_600SemiBold";
 export const fontMedium = "Montserrat_500Medium";
+export const fontBold = "Montserrat_700Bold";
 
 export const backgroundDefault = {
   backgroundColor: colorBackground,
