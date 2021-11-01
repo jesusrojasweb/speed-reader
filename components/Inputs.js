@@ -20,7 +20,10 @@ const Inputs = (props) => {
           color: isFocus ? colorPrincipal : colorText,
           fontSize: 14,
         }}
-        inputContainerStyle={styles(isFocus).input}
+        inputContainerStyle={{
+          ...styles(isFocus).input,
+          ...props.container,
+        }}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
       />

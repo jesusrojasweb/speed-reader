@@ -13,6 +13,10 @@ import {
 const BookCard = (props) => {
   const { name, isFile, author, navigation } = props;
 
+  let text = name;
+
+  if (name.length > 16) text = name.slice(0, 16) + "...";
+
   return (
     <TouchableOpacity
       onPress={() => {
@@ -22,7 +26,7 @@ const BookCard = (props) => {
     >
       <ImageCard isFile={isFile} />
 
-      <Text style={styles.name}>{name}</Text>
+      <Text style={styles.name}>{text}</Text>
       <Text style={styles.author}>{author}</Text>
     </TouchableOpacity>
   );

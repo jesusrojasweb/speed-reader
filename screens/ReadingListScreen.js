@@ -7,15 +7,6 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import {
-  Box,
-  Center,
-  Fab,
-  Menu,
-  NativeBaseProvider,
-  Pressable,
-} from "native-base";
-import { FontAwesome } from "@expo/vector-icons";
 
 import {
   backgroundDefault,
@@ -24,10 +15,10 @@ import {
   fontRegular,
   navigationOptions,
 } from "./styles/variables";
-import AddButton from "../components/AddButton";
 import CarrouselList from "../components/CarrouselList";
 
 import { auth, db } from "../firebase";
+import MenuDots from "../components/MenuDots";
 
 const ReadingListScreen = ({ navigation }) => {
   const [uploaded, setUploaded] = useState([]);
@@ -36,44 +27,20 @@ const ReadingListScreen = ({ navigation }) => {
     navigation.setOptions({
       ...navigationOptions,
       title: "Lista de Lectura",
-      headerRight: () => (
-        <NativeBaseProvider>
-          <Center flex={1} px={3}>
-            <Box>
-              <Menu
-                trigger={(triggerProps) => {
-                  return (
-                    <Pressable
-                      accesibilityLabel="More options menu"
-                      {...triggerProps}
-                      style={{
-                        marginRight: 31,
-                      }}
-                    >
-                      <FontAwesome
-                        name="plus"
-                        size={20}
-                        color={colorPrincipal}
-                      />
-                    </Pressable>
-                  );
-                }}
-              >
-                <Menu.Item onPress={() => navigation.navigate("Create Text")}>
-                  Agregar Texto
-                </Menu.Item>
-                <Menu.Item
-                  onPress={() =>
-                    alert("Esta funcionalidad todavia no esta disponible")
-                  }
-                >
-                  Agregar Archivo
-                </Menu.Item>
-              </Menu>
-            </Box>
-          </Center>
-        </NativeBaseProvider>
-      ),
+      headerRight: () => {
+        const menuItems = [
+          {
+            text: "Agregar Texto",
+            onPress: () => navigation.navigate("Create Text"),
+          },
+          {
+            text: "Agregar Archivo",
+            onPress: () =>
+              alert("Esta funcionalidad todavia no esta disponible"),
+          },
+        ];
+        return <MenuDots items={menuItems} />;
+      },
     });
   }, [navigation]);
 
