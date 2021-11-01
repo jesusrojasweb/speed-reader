@@ -15,7 +15,7 @@ const CarrouselList = ({ elements = [], title = "Lecutras", navigation }) => {
         {elements !== [] && (
           <>
             {elements.map(({ id, data }) => (
-              <BookCard key={id} {...data} navigation={navigation} />
+              <BookCard key={id} id={id} {...data} navigation={navigation} />
             ))}
           </>
         )}

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-
+import { FontAwesome } from "@expo/vector-icons";
 import {
   backgroundDefault,
   colorPrincipal,
@@ -39,7 +39,17 @@ const ReadingListScreen = ({ navigation }) => {
               alert("Esta funcionalidad todavia no esta disponible"),
           },
         ];
-        return <MenuDots items={menuItems} />;
+        return (
+          <MenuDots
+            items={menuItems}
+            Icon={() => (
+              <FontAwesome name="plus" size={20} color={colorPrincipal} />
+            )}
+            style={{
+              marginRight: 31,
+            }}
+          />
+        );
       },
     });
   }, [navigation]);

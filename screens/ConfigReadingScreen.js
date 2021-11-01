@@ -6,13 +6,16 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { Image } from "react-native-elements";
 import ImageCard from "../components/ImageCard";
 import ButtonType from "../components/ButtonType";
+import MenuDots from "../components/MenuDots";
 import IncrementInput from "../components/IncrementInput";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import {
+  colorPrincipal,
   backgroundDefault,
   fontSemiBold,
   colorText,
@@ -20,20 +23,34 @@ import {
   fontRegular,
   fontMedium,
 } from "./styles/variables";
+import { auth, db } from "../firebase";
 
 const ConfigReadingScreen = ({ navigation, route }) => {
   const isFile = route?.params?.isFile || false;
   const name = route?.params?.name || "Nombre";
   const author = route?.params?.author || "Autor";
   const text = route?.params?.text || "Texto";
+  const textId = route?.params?.id || "Id";
 
   const lengthText = text.split(" ").length;
 
   const [words, setWords] = useState(1);
   const [ppm, setPpm] = useState(200);
+  const [isLoading, setIsLoading] = useState(false);
 
   const divided = lengthText / ppm;
   const estimated = divided.toFixed(2);
+
+  const menuItems = [
+    {
+      text: "Editar Lectura",
+      onPress: () => alert("Todavia no esta disponible esta opcion"),
+    },
+    {
+      text: "Borrar Lectura",
+      onPress: () => deleteReading(),
+    },
+  ];
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -58,6 +75,24 @@ const ConfigReadingScreen = ({ navigation, route }) => {
     });
   }, [navigation, route]);
 
+  const deleteReading = async () => {
+    setIsLoading(true);
+    await db
+      .collection("texts")
+      .doc(auth.currentUser.uid)
+      .collection("uploaded")
+      .doc(textId)
+      .delete()
+      .then(() => {
+        alert("Lectura borrada satisfactoriamente");
+        navigation.navigate("List");
+      })
+      .catch((error) => {
+        alert("Hubo un error", error);
+      });
+    setIsLoading(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
@@ -65,8 +100,37 @@ const ConfigReadingScreen = ({ navigation, route }) => {
       </View>
       <View style={styles.options}>
         <ScrollView>
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.author}>{author}</Text>
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.name}>{name}</Text>
+              <Text style={styles.author}>{author}</Text>
+            </View>
+            <View style={styles.config}>
+              <TouchableOpacity style={styles.favorite}>
+                <FontAwesome name="bookmark" size={18} color="white" />
+              </TouchableOpacity>
+              <View>
+                <MenuDots
+                  items={menuItems}
+                  Icon={() => (
+                    <FontAwesome5
+                      name="ellipsis-v"
+                      size={24}
+                      color={colorPrincipal}
+                    />
+                  )}
+                />
+              </View>
+            </View>
+          </View>
+
+          {isLoading && (
+            <ActivityIndicator
+              size="large"
+              color={colorPrincipal}
+              style={{ marginBottom: 40 }}
+            />
+          )}
 
           <IncrementInput
             label="Palabras por vista:"
@@ -145,4 +209,22 @@ const styles = StyleSheet.create({
     fontFamily: fontRegular,
     color: colorText,
   },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  config: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  favorite: {
+    backgroundColor: colorPrincipal,
+    borderRadius: 90,
+    paddingVertical: 4,
+    paddingHorizontal: 7,
+    marginRight: 10,
+  },
+  menu: {},
 });

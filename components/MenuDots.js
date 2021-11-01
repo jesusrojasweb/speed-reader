@@ -11,7 +11,7 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import { colorPrincipal } from "../screens/styles/variables";
 
-const MenuDots = ({ items }) => {
+const MenuDots = ({ items, Icon, style }) => {
   return (
     <NativeBaseProvider>
       <Center flex={1} px={3}>
@@ -22,11 +22,9 @@ const MenuDots = ({ items }) => {
                 <Pressable
                   accesibilityLabel="More options menu"
                   {...triggerProps}
-                  style={{
-                    marginRight: 31,
-                  }}
+                  style={style}
                 >
-                  <FontAwesome name="plus" size={20} color={colorPrincipal} />
+                  <Icon />
                 </Pressable>
               );
             }}
