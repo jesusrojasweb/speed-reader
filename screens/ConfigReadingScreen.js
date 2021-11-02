@@ -29,14 +29,17 @@ const ConfigReadingScreen = ({ navigation, route }) => {
   const isFile = route?.params?.isFile || false;
   const name = route?.params?.name || "Nombre";
   const author = route?.params?.author || "Autor";
+  const chapters = route?.params?.chapters || "Chapters";
   const text = route?.params?.text || "Texto";
   const textId = route?.params?.id || "Id";
+  const defaultIsFavorite = route?.params?.isFavorite || false;
 
   const lengthText = text.split(" ").length;
 
   const [words, setWords] = useState(1);
   const [ppm, setPpm] = useState(200);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(defaultIsFavorite);
 
   const divided = lengthText / ppm;
   const estimated = divided.toFixed(2);
@@ -92,6 +95,29 @@ const ConfigReadingScreen = ({ navigation, route }) => {
       });
     setIsLoading(false);
   };
+  const handleFavorite = async () => {
+    setIsLoading(true);
+
+    await db
+      .collection("texts")
+      .doc(auth.currentUser.uid)
+      .collection("uploaded")
+      .doc(textId)
+      .set({
+        name,
+        chapters,
+        isFile: false,
+        author: auth.currentUser.displayName,
+        isFavorite: !isFavorite,
+      })
+      .then(() => {
+        setIsFavorite(!isFavorite);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+    setIsLoading(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -106,8 +132,20 @@ const ConfigReadingScreen = ({ navigation, route }) => {
               <Text style={styles.author}>{author}</Text>
             </View>
             <View style={styles.config}>
-              <TouchableOpacity style={styles.favorite}>
-                <FontAwesome name="bookmark" size={18} color="white" />
+              <TouchableOpacity
+                style={{
+                  ...styles.favorite,
+                  backgroundColor: isFavorite ? colorPrincipal : "white",
+                  borderColor: isFavorite ? "transparent" : colorPrincipal,
+                  borderWidth: 1,
+                }}
+                onPress={handleFavorite}
+              >
+                <FontAwesome
+                  name="bookmark"
+                  size={18}
+                  color={isFavorite ? "white" : colorPrincipal}
+                />
               </TouchableOpacity>
               <View>
                 <MenuDots
