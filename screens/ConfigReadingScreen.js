@@ -26,13 +26,21 @@ import {
 import { auth, db } from "../firebase";
 
 const ConfigReadingScreen = ({ navigation, route }) => {
-  const isFile = route?.params?.isFile || false;
-  const name = route?.params?.name || "Nombre";
-  const author = route?.params?.author || "Autor";
-  const chapters = route?.params?.chapters || "Chapters";
-  const text = route?.params?.text || "Texto";
+  const {
+    isFile = false,
+    name = "Nombre",
+    author = "Author",
+    text = "Texto",
+    chapters = [],
+    actualChapter = 0,
+    isCompleted = false,
+  } = route.params;
+
   const textId = route?.params?.id || "Id";
   const defaultIsFavorite = route?.params?.isFavorite || false;
+
+  console.log("\n\n\n\n\ntextid", textId);
+  console.log("id", route?.params?.id);
 
   const lengthText = text.split(" ").length;
 
@@ -47,7 +55,17 @@ const ConfigReadingScreen = ({ navigation, route }) => {
   const menuItems = [
     {
       text: "Editar Lectura",
-      onPress: () => alert("Todavia no esta disponible esta opcion"),
+      onPress: () =>
+        navigation.navigate("Create Text", {
+          name,
+          author,
+          text,
+          chapters,
+          isFile,
+          textId,
+          isFavorite,
+          actualChapter,
+        }),
     },
     {
       text: "Borrar Lectura",
@@ -106,9 +124,11 @@ const ConfigReadingScreen = ({ navigation, route }) => {
       .set({
         name,
         chapters,
-        isFile: false,
-        author: auth.currentUser.displayName,
+        isFile,
+        author,
         isFavorite: !isFavorite,
+        actualChapter,
+        isCompleted,
       })
       .then(() => {
         setIsFavorite(!isFavorite);
@@ -200,6 +220,11 @@ const ConfigReadingScreen = ({ navigation, route }) => {
                 text,
                 words,
                 ppm,
+                chapters,
+                isFile,
+                textId,
+                isFavorite,
+                actualChapter,
               })
             }
           />

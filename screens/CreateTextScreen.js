@@ -25,25 +25,32 @@ function useForceUpdate() {
   return () => setValue((value) => value + 1); // update the state to force render
 }
 
-const CreateTextScreen = ({ navigation }) => {
-  const [name, setName] = useState("");
-  const [text, setText] = useState("");
+const CreateTextScreen = ({ navigation, route }) => {
+  const name = route?.params?.name || "";
+  const chapters = route?.params?.chapters || [];
+  const textId = route?.params?.textId || "";
+  console.log("\n\n\n\n\n");
+  console.log("textIdTop", textId);
+
+  const [nameInput, setNameInput] = useState(name);
+  // const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [chapters, setChapters] = useState([]);
+  const [chaptersInput, setChaptersInput] = useState(chapters);
 
   const forceUpdate = useForceUpdate();
 
   useLayoutEffect(() => {
     navigation.setOptions({
       ...navigationOptions,
+      // title: route?.params === undefined ? "Crear Texto" : "Editar Texto",
     });
   }, [navigation, chapters]);
 
   const createText = async () => {
     let isEmpty = false;
 
-    if (chapters[0] !== undefined) {
-      chapters.forEach(({ name, content }) => {
+    if (chaptersInput[0] !== undefined) {
+      chaptersInput.forEach(({ name, content }) => {
         if (name === "") isEmpty = true;
 
         if (content === "") isEmpty = true;
@@ -52,25 +59,59 @@ const CreateTextScreen = ({ navigation }) => {
       isEmpty = true;
     }
 
-    if (name.trim() !== "" && !isEmpty) {
+    if (nameInput.trim() !== "" && !isEmpty) {
       setIsLoading(true);
 
-      await db
-        .collection("texts")
-        .doc(auth.currentUser.uid)
-        .collection("uploaded")
-        .add({
-          name,
-          chapters,
-          isFile: false,
-          author: auth.currentUser.displayName,
-        })
-        .then(() => {
-          navigation.goBack();
-        })
-        .catch((error) => {
-          alert(error);
-        });
+      if (route.params === undefined) {
+        await db
+          .collection("texts")
+          .doc(auth.currentUser.uid)
+          .collection("uploaded")
+          .add({
+            name: nameInput,
+            chapters: chaptersInput,
+            isFile: false,
+            author: auth.currentUser.displayName,
+          })
+          .then(() => {
+            navigation.goBack();
+          })
+          .catch((error) => {
+            alert(error);
+          });
+        setIsLoading(false);
+      } else {
+        const { author, isFile, actualChapter, isFavorite } = route.params;
+        await db
+          .collection("texts")
+          .doc(auth.currentUser.uid)
+          .collection("uploaded")
+          .doc(route.params.textId)
+          .set({
+            name: nameInput,
+            chapters: chaptersInput,
+            author,
+            isFile,
+            isFavorite,
+            actualChapter,
+            isComplete: false,
+          })
+          .then(() => {
+            navigation.navigate("Config Screen", {
+              name: nameInput,
+              chapters: chaptersInput,
+              author,
+              isFile,
+              isFavorite,
+              actualChapter,
+              isComplete: false,
+              id: textId,
+            });
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      }
       setIsLoading(false);
     } else {
       alert("Todos los campos son requeridos");
@@ -79,25 +120,25 @@ const CreateTextScreen = ({ navigation }) => {
 
   const addCapter = () => {
     const newChapter = [
-      ...chapters,
+      ...chaptersInput,
       {
-        id: chapters.length,
+        id: chaptersInput.length,
         name: "",
         content: "",
       },
     ];
 
-    setChapters(newChapter);
+    setChaptersInput(newChapter);
   };
 
   const editChapter = ({ id, textName, textContent }) => {
-    const chaptersCopy = chapters;
+    const chaptersCopy = chaptersInput;
 
     chaptersCopy[id].name =
       textName !== undefined ? textName : chaptersCopy[id]?.name;
     chaptersCopy[id].content =
       textContent !== undefined ? textContent : chaptersCopy[id]?.content;
-    setChapters(chaptersCopy);
+    setChaptersInput(chaptersCopy);
     forceUpdate();
   };
 
@@ -112,8 +153,8 @@ const CreateTextScreen = ({ navigation }) => {
           <Center>
             <Inputs
               placeholder="Nombre del Documento"
-              value={name}
-              onChangeText={(text) => setName(text)}
+              value={nameInput}
+              onChangeText={(text) => setNameInput(text)}
               container={{
                 width: "100%",
               }}
@@ -123,7 +164,7 @@ const CreateTextScreen = ({ navigation }) => {
                 width: "100%",
               }}
             >
-              {chapters.map(({ id, name, content }) => (
+              {chaptersInput.map(({ id, name, content }) => (
                 <Accordion.Item>
                   <Accordion.Summary>
                     {name}

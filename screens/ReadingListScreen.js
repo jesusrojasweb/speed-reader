@@ -22,6 +22,8 @@ import MenuDots from "../components/MenuDots";
 
 const ReadingListScreen = ({ navigation }) => {
   const [uploaded, setUploaded] = useState([]);
+  const [reading, setReading] = useState([]);
+  const [completed, setCompleted] = useState([]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -66,6 +68,29 @@ const ReadingListScreen = ({ navigation }) => {
             data: doc.data(),
           }))
         );
+
+        const readingFilter = snapshot.docs.filter(
+          (doc) => doc.data().actualChapter > 0 && !doc.data().isCompleted
+        );
+        if (readingFilter) {
+          setReading(
+            readingFilter.map((doc) => ({
+              id: doc.id,
+              data: doc.data(),
+            }))
+          );
+        }
+        const completedFilter = snapshot.docs.filter(
+          (doc) => doc.data().isCompleted
+        );
+        if (completedFilter) {
+          setCompleted(
+            completedFilter.map((doc) => ({
+              id: doc.id,
+              data: doc.data(),
+            }))
+          );
+        }
       });
     return unsuscribe;
   });
@@ -73,10 +98,24 @@ const ReadingListScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        {uploaded !== [] && (
+        {reading[0] !== undefined && (
+          <CarrouselList
+            title="Lecturas Recientes"
+            elements={reading}
+            navigation={navigation}
+          />
+        )}
+        {uploaded[0] !== undefined && (
           <CarrouselList
             title="Lecturas Subidas"
             elements={uploaded}
+            navigation={navigation}
+          />
+        )}
+        {completed[0] !== undefined && (
+          <CarrouselList
+            title="Lecturas Completadas"
+            elements={completed}
             navigation={navigation}
           />
         )}
