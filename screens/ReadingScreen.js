@@ -18,18 +18,17 @@ import ControlReading from "../components/ControlReading";
 import { auth, db } from "../firebase";
 
 let counter = 0;
+const UNDEFINED = "Seccion de Lectura";
 
 const ReadingScreen = ({ navigation, route }) => {
-  const {
-    name,
-    author,
-    text,
-    chapters,
-    isFile,
-    textId,
-    isFavorite,
-    actualChapter,
-  } = route.params;
+  const name = route?.params?.name || UNDEFINED;
+  const author = route?.params?.author || "Author";
+  const text = route?.params?.text || "Texto";
+  const chapters = route?.params?.chapters || [];
+  const isFile = route?.params?.isFile || false;
+  const textId = route?.params?.textId || "Id";
+  const isFavorite = route?.params?.isFavorite || false;
+  const actualChapter = route?.params?.actualChapter || 0;
 
   const words = route?.params?.words || 1;
   const ppm = route?.params?.ppm || 1;
@@ -49,7 +48,7 @@ const ReadingScreen = ({ navigation, route }) => {
       ...navigationOptions,
       title: name,
       headerLeft: () => {
-        if (text !== "") {
+        if (name !== UNDEFINED) {
           return (
             <TouchableOpacity
               onPress={() => {
@@ -82,7 +81,7 @@ const ReadingScreen = ({ navigation, route }) => {
     }
     const speed = (words * 60000) / ppm;
 
-    if (chaptersReading !== []) {
+    if (chaptersReading[0] !== undefined) {
       if (counter < chaptersReading[currentChapter].content.length) {
         showWords();
       }
@@ -203,56 +202,66 @@ const ReadingScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.chapter}>{chapters[currentChapter].name}</Text>
-      <View style={styles.reader}>
-        <Text style={{ ...styles.text, fontSize: textSize }}>
-          {readingText}
-        </Text>
-      </View>
-      <View style={styles.controlsContainer}>
-        <View style={styles.controls}>
-          <ControlReading
-            icon="backward"
-            text="Cap Ant"
-            onPress={backChapter}
-          />
-          <View>
-            <View style={styles.controlsViews}>
-              <ControlReading
-                icon="step-backward"
-                style={{ marginRight: 10 }}
-                onPress={backStep}
-              />
-              <ControlReading icon="step-forward" onPress={folowStep} />
-            </View>
-            <Text
-              style={{
-                color: colorText,
-                fontFamily: fontRegular,
-                fontSize: 12,
-                textAlign: "center",
-              }}
-            >
-              Vistas
+      {name === UNDEFINED ? (
+        <View>
+          <Text style={styles.info}>No hay lectura para leer</Text>
+        </View>
+      ) : (
+        <>
+          <Text style={styles.chapter}>
+            {chapters[currentChapter]?.name || "Nombre"}
+          </Text>
+          <View style={styles.reader}>
+            <Text style={{ ...styles.text, fontSize: textSize }}>
+              {readingText}
             </Text>
           </View>
-          <ControlReading
-            icon="forward"
-            text="Sig Cap"
-            onPress={followChapter}
-          />
-        </View>
-        <View>
-          <TouchableOpacity style={styles.button} onPress={handleReading}>
-            <FontAwesome5
-              name={isPlay ? "pause" : "play"}
-              size={20}
-              color={"white"}
-              style={{ paddingHorizontal: 4, paddingVertical: 2 }}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+          <View style={styles.controlsContainer}>
+            <View style={styles.controls}>
+              <ControlReading
+                icon="backward"
+                text="Cap Ant"
+                onPress={backChapter}
+              />
+              <View>
+                <View style={styles.controlsViews}>
+                  <ControlReading
+                    icon="step-backward"
+                    style={{ marginRight: 10 }}
+                    onPress={backStep}
+                  />
+                  <ControlReading icon="step-forward" onPress={folowStep} />
+                </View>
+                <Text
+                  style={{
+                    color: colorText,
+                    fontFamily: fontRegular,
+                    fontSize: 12,
+                    textAlign: "center",
+                  }}
+                >
+                  Vistas
+                </Text>
+              </View>
+              <ControlReading
+                icon="forward"
+                text="Sig Cap"
+                onPress={followChapter}
+              />
+            </View>
+            <View>
+              <TouchableOpacity style={styles.button} onPress={handleReading}>
+                <FontAwesome5
+                  name={isPlay ? "pause" : "play"}
+                  size={20}
+                  color={"white"}
+                  style={{ paddingHorizontal: 4, paddingVertical: 2 }}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </>
+      )}
     </View>
   );
 };
@@ -303,5 +312,12 @@ const styles = StyleSheet.create({
   controlsViews: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  info: {
+    color: colorText,
+    marginTop: 30,
+    fontFamily: fontSemiBold,
+    paddingRight: 30,
+    textAlign: "center",
   },
 });

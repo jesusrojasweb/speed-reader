@@ -6,6 +6,7 @@ import {
   Animated,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import {
@@ -13,6 +14,7 @@ import {
   colorPrincipal,
   colorText,
   fontRegular,
+  fontSemiBold,
   navigationOptions,
 } from "./styles/variables";
 import CarrouselList from "../components/CarrouselList";
@@ -23,7 +25,8 @@ import MenuDots from "../components/MenuDots";
 const ReadingListScreen = ({ navigation }) => {
   const [uploaded, setUploaded] = useState([]);
   const [reading, setReading] = useState([]);
-  const [completed, setCompleted] = useState([]);
+  const [toRead, setToReadompleted] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -80,17 +83,16 @@ const ReadingListScreen = ({ navigation }) => {
             }))
           );
         }
-        const completedFilter = snapshot.docs.filter(
-          (doc) => doc.data().isCompleted
-        );
-        if (completedFilter) {
-          setCompleted(
-            completedFilter.map((doc) => ({
+        const toRead = snapshot.docs.filter((doc) => !doc.data().isCompleted);
+        if (toRead) {
+          setToReadompleted(
+            toRead.map((doc) => ({
               id: doc.id,
               data: doc.data(),
             }))
           );
         }
+        setIsLoading(false);
       });
     return unsuscribe;
   });
@@ -105,19 +107,22 @@ const ReadingListScreen = ({ navigation }) => {
             navigation={navigation}
           />
         )}
-        {uploaded[0] !== undefined && (
+        {toRead[0] !== undefined && (
           <CarrouselList
-            title="Lecturas Subidas"
-            elements={uploaded}
+            title="Lecturas por leer"
+            elements={toRead}
             navigation={navigation}
           />
         )}
-        {completed[0] !== undefined && (
-          <CarrouselList
-            title="Lecturas Completadas"
-            elements={completed}
-            navigation={navigation}
+        {isLoading && (
+          <ActivityIndicator
+            size="large"
+            color={colorPrincipal}
+            style={{ marginTop: 40, paddingRight: 30 }}
           />
+        )}
+        {toRead[0] === undefined && reading[0] === undefined && !isLoading && (
+          <Text style={styles.info}>No tienes textos por leer</Text>
         )}
       </ScrollView>
     </View>
@@ -135,5 +140,12 @@ const styles = StyleSheet.create({
   menuItem: {
     fontFamily: fontRegular,
     color: colorText,
+  },
+  info: {
+    color: colorText,
+    marginTop: 30,
+    fontFamily: fontSemiBold,
+    paddingRight: 30,
+    textAlign: "center",
   },
 });

@@ -34,7 +34,7 @@ const ConfigReadingScreen = ({ navigation, route }) => {
     chapters = [],
     actualChapter = 0,
     isCompleted = false,
-  } = route.params;
+  } = route?.params;
 
   const textId = route?.params?.id || "Id";
   const defaultIsFavorite = route?.params?.isFavorite || false;
