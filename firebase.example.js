@@ -4,11 +4,12 @@ import "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAe1PtNO1XshcYWOUVy_0zbNCfQtYjh2i8",
-  authDomain: "speed-reading-jesusrojasweb.firebaseapp.com",
-  projectId: "speed-reading-jesusrojasweb",
-  storageBucket: "speed-reading-jesusrojasweb.appspot.com",
-  messagingSenderId: "738875400030",
-  appId: "1:738875400030:web:3c0e2626412951041639cf",
+  apiKey: "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890_A",
+  authDomain: "nombre-proyecto.firebaseapp.com",
+  projectId: "nombre-proyecto",
+  storageBucket: "nombre-proyecto.appspot.com",
+  messagingSenderId: "012345678901",
+  appId: "0:123456789012:web:1a2b1234567890123456yr",
 };
 
 let app;
